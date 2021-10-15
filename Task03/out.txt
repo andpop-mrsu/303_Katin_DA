@@ -1,0 +1,358 @@
+1. Составить список фильмов, имеющих хотя бы одну оценку. Список фильмов отсортировать по году выпуска и по названиям. В списке оставить первые 10 фильмов.
+--------------------------------------------------
+SELECT * FROM movies where (SELECT COUNT(*) FROM ratings where movie_id == movies.id) > 0 ORDER BY year, title LIMIT 10;
+2. Вывести список всех пользователей, фамилии (не имена!) которых начинаются на букву 'A'. Полученный список отсортировать по дате регистрации. В списке оставить первых 5 пользователей.
+--------------------------------------------------
+SELECT * FROM users WHERE name LIKE '%% A%%' ORDER BY register_date LIMIT 5;
+┌─────┬────────────────────┬───────────────────────────────┬────────┬───────────────┬───────────────┐
+│ id  │        name        │             email             │ gender │ register_date │  occupation   │
+├─────┼────────────────────┼───────────────────────────────┼────────┼───────────────┼───────────────┤
+│ 151 │ Callie Abshire     │ itzel.rohan@yahoo.com         │ female │ 2005-01-02    │ administrator │
+│ 749 │ Jena Abernathy     │ shanny36@hotmail.com          │ female │ 2006-06-10    │ other         │
+│ 817 │ Deron Altenwerth   │ lysanne.considine@hotmail.com │ male   │ 2007-05-16    │ student       │
+│ 539 │ Lilliana Abernathy │ demond65@schaden.biz          │ female │ 2007-10-25    │ administrator │
+│ 437 │ Quinton Anderson   │ stephany.hyatt@thiel.com      │ male   │ 2008-04-04    │ other         │
+└─────┴────────────────────┴───────────────────────────────┴────────┴───────────────┴───────────────┘
+3. Написать запрос, возвращающий информацию о рейтингах в более читаемом формате: имя и фамилия эксперта, название фильма, год выпуска, оценка и дата оценки в формате ГГГГ-ММ-ДД. Отсортировать данные по имени эксперта, затем названию фильма и оценке. В списке оставить первые 50 записей.
+--------------------------------------------------
+SELECT users.name, movies.title, movies.year, rating, DATE(timestamp, 'unixepoch') as date FROM ratings INNER JOIN users ON users.id == user_id INNER JOIN movies ON movies.id == movie_id ORDER BY users.name, movies.title, rating LIMIT 50
+┌────────────────┬──────────────────────────────────────────────────────────────────────────┬──────┬────────┬────────────┐
+│      name      │                                  title                                   │ year │ rating │    date    │
+├────────────────┼──────────────────────────────────────────────────────────────────────────┼──────┼────────┼────────────┤
+│ Abel Stark     │ 101 Dalmatians                                                           │ 1996 │ 4.0    │ 1996-12-17 │
+│ Abel Stark     │ Adventures of Pinocchio,  The                                            │ 1996 │ 3.0    │ 1996-12-17 │
+│ Abel Stark     │ Barb Wire                                                                │ 1996 │ 3.0    │ 1996-12-17 │
+│ Abel Stark     │ Bed of Roses                                                             │ 1996 │ 5.0    │ 1996-12-17 │
+│ Abel Stark     │ Broken Arrow                                                             │ 1996 │ 3.0    │ 1996-12-17 │
+│ Abel Stark     │ Cable Guy,  The                                                          │ 1996 │ 3.0    │ 1996-12-17 │
+│ Abel Stark     │ Craft,  The                                                              │ 1996 │ 5.0    │ 1996-12-17 │
+│ Abel Stark     │ Don't Be a Menace to South Central While Drinking Your Juice in the Hood │ 1996 │ 3.0    │ 1996-12-17 │
+│ Abel Stark     │ Eraser                                                                   │ 1996 │ 3.0    │ 1996-12-17 │
+│ Abel Stark     │ Executive Decision                                                       │ 1996 │ 3.0    │ 1996-12-17 │
+│ Abel Stark     │ Father of the Bride Part II                                              │ 1995 │ 3.0    │ 1996-12-17 │
+│ Abel Stark     │ Grumpier Old Men                                                         │ 1995 │ 4.0    │ 1996-12-17 │
+│ Abel Stark     │ Heat                                                                     │ 1995 │ 5.0    │ 1996-12-17 │
+│ Abel Stark     │ Hunchback of Notre Dame,  The                                            │ 1996 │ 4.0    │ 1996-12-17 │
+│ Abel Stark     │ Independence Day (a.k.a. ID4)                                            │ 1996 │ 4.0    │ 1996-12-17 │
+│ Abel Stark     │ Juror,  The                                                              │ 1996 │ 4.0    │ 1996-12-17 │
+│ Abel Stark     │ Leaving Las Vegas                                                        │ 1995 │ 5.0    │ 1996-12-17 │
+│ Abel Stark     │ Long Kiss Goodnight,  The                                                │ 1996 │ 3.0    │ 1996-12-17 │
+│ Abel Stark     │ Mission: Impossible                                                      │ 1996 │ 3.0    │ 1996-12-17 │
+│ Abel Stark     │ Ransom                                                                   │ 1996 │ 4.0    │ 1996-12-17 │
+│ Abel Stark     │ Rock,  The                                                               │ 1996 │ 4.0    │ 1996-12-17 │
+│ Abel Stark     │ Screamers                                                                │ 1995 │ 2.0    │ 1996-12-17 │
+│ Abel Stark     │ Spy Hard                                                                 │ 1996 │ 3.0    │ 1996-12-17 │
+│ Abel Stark     │ Sudden Death                                                             │ 1995 │ 2.0    │ 1996-12-17 │
+│ Abel Stark     │ Things to Do in Denver When You're Dead                                  │ 1995 │ 3.0    │ 1996-12-17 │
+│ Abel Stark     │ Toy Story                                                                │ 1995 │ 5.0    │ 1996-12-17 │
+│ Abel Stark     │ Trainspotting                                                            │ 1996 │ 4.0    │ 1996-12-17 │
+│ Abel Stark     │ Twelve Monkeys (a.k.a. 12 Monkeys)                                       │ 1995 │ 4.0    │ 1996-12-17 │
+│ Abel Stark     │ Willy Wonka & the Chocolate Factory                                      │ 1971 │ 4.0    │ 1996-12-17 │
+│ Abelardo Kunze │ Arrival                                                                  │ 2016 │ 5.0    │ 2017-06-24 │
+│ Abelardo Kunze │ Avengers,  The                                                           │ 2012 │ 2.5    │ 2017-06-24 │
+│ Abelardo Kunze │ Big Hero 6                                                               │ 2014 │ 4.0    │ 2017-06-24 │
+│ Abelardo Kunze │ Brave                                                                    │ 2012 │ 4.5    │ 2017-06-24 │
+│ Abelardo Kunze │ Coraline                                                                 │ 2009 │ 4.5    │ 2017-06-24 │
+│ Abelardo Kunze │ Doctor Strange                                                           │ 2016 │ 4.0    │ 2017-06-24 │
+│ Abelardo Kunze │ Finding Nemo                                                             │ 2003 │ 5.0    │ 2017-06-24 │
+│ Abelardo Kunze │ Frozen                                                                   │ 2013 │ 4.5    │ 2017-06-24 │
+│ Abelardo Kunze │ Gandhi                                                                   │ 1982 │ 4.0    │ 2017-06-24 │
+│ Abelardo Kunze │ Hidden Figures                                                           │ 2016 │ 4.0    │ 2017-06-24 │
+│ Abelardo Kunze │ Hugo                                                                     │ 2011 │ 4.5    │ 2017-06-24 │
+│ Abelardo Kunze │ Inception                                                                │ 2010 │ 3.5    │ 2017-06-24 │
+│ Abelardo Kunze │ Incredibles,  The                                                        │ 2004 │ 4.5    │ 2017-06-24 │
+│ Abelardo Kunze │ Inside Out                                                               │ 2015 │ 5.0    │ 2017-06-24 │
+│ Abelardo Kunze │ King's Speech,  The                                                      │ 2010 │ 4.5    │ 2017-06-24 │
+│ Abelardo Kunze │ Kubo and the Two Strings                                                 │ 2016 │ 5.0    │ 2017-06-24 │
+│ Abelardo Kunze │ La La Land                                                               │ 2016 │ 4.0    │ 2017-06-24 │
+│ Abelardo Kunze │ Lion King,  The                                                          │ 1994 │ 5.0    │ 2017-06-24 │
+│ Abelardo Kunze │ Moana                                                                    │ 2016 │ 3.0    │ 2017-06-24 │
+│ Abelardo Kunze │ Mrs. Doubtfire                                                           │ 1993 │ 4.5    │ 2017-06-24 │
+│ Abelardo Kunze │ Paperman                                                                 │ 2012 │ 5.0    │ 2017-06-24 │
+└────────────────┴──────────────────────────────────────────────────────────────────────────┴──────┴────────┴────────────┘
+4. Вывести список фильмов с указанием тегов, которые были им присвоены пользователями. Сортировать по году выпуска, затем по названию фильма, затем по тегу. В списке оставить первые 40 записей.
+--------------------------------------------------
+SELECT movies.*, tags.tag FROM movies INNER JOIN tags ON movies.id == movie_id ORDER BY movies.year, movies.title, tags.tag LIMIT 40;
+┌────────┬─────────────────────────────────────────────────────────────┬──────┬──────────────────────────┬───────────────────────┐
+│   id   │                            title                            │ year │          genres          │          tag          │
+├────────┼─────────────────────────────────────────────────────────────┼──────┼──────────────────────────┼───────────────────────┤
+│ 156605 │ Paterson                                                    │      │ (no genres listed)       │ quirky                │
+│ 156605 │ Paterson                                                    │      │ (no genres listed)       │ sweet                 │
+│ 156605 │ Paterson                                                    │      │ (no genres listed)       │ understated           │
+│ 3310   │ Kid,  The                                                   │ 1921 │ Comedy|Drama             │ orphans               │
+│ 1348   │ Nosferatu (Nosferatu,  eine Symphonie des Grauens)          │ 1922 │ Horror                   │ vampires              │
+│ 8609   │ Our Hospitality                                             │ 1923 │ Comedy                   │ In Netflix queue      │
+│ 8235   │ Safety Last!                                                │ 1923 │ Action|Comedy|Romance    │ Clock                 │
+│ 25753  │ Greed                                                       │ 1924 │ Drama                    │ gold                  │
+│ 3629   │ Gold Rush,  The                                             │ 1925 │ Adventure|Comedy|Romance │ mining                │
+│ 4404   │ Faust                                                       │ 1926 │ Drama|Fantasy|Horror     │ In Netflix queue      │
+│ 8275   │ College                                                     │ 1927 │ Comedy                   │ In Netflix queue      │
+│ 3306   │ Circus,  The                                                │ 1928 │ Comedy                   │ big top               │
+│ 3306   │ Circus,  The                                                │ 1928 │ Comedy                   │ circus                │
+│ 6985   │ Passion of Joan of Arc,  The (Passion de Jeanne d'Arc,  La) │ 1928 │ Drama                    │ saint                 │
+│ 25771  │ Andalusian Dog,  An (Chien andalou,  Un)                    │ 1929 │ Fantasy                  │ mindfuck              │
+│ 25771  │ Andalusian Dog,  An (Chien andalou,  Un)                    │ 1929 │ Fantasy                  │ surreal               │
+│ 25771  │ Andalusian Dog,  An (Chien andalou,  Un)                    │ 1929 │ Fantasy                  │ surrealism            │
+│ 4970   │ Blue Angel,  The (Blaue Engel,  Der)                        │ 1930 │ Drama                    │ nightclub             │
+│ 4970   │ Blue Angel,  The (Blaue Engel,  Der)                        │ 1930 │ Drama                    │ singers               │
+│ 8424   │ Divorcee,  The                                              │ 1930 │ Drama|Romance            │ divorce               │
+│ 3307   │ City Lights                                                 │ 1931 │ Comedy|Drama|Romance     │ blind                 │
+│ 2648   │ Frankenstein                                                │ 1931 │ Drama|Horror|Sci-Fi      │ In Netflix queue      │
+│ 1260   │ M                                                           │ 1931 │ Crime|Film-Noir|Thriller │ atmospheric           │
+│ 1260   │ M                                                           │ 1931 │ Crime|Film-Noir|Thriller │ chilly                │
+│ 1260   │ M                                                           │ 1931 │ Crime|Film-Noir|Thriller │ creepy                │
+│ 1260   │ M                                                           │ 1931 │ Crime|Film-Noir|Thriller │ menacing              │
+│ 1260   │ M                                                           │ 1931 │ Crime|Film-Noir|Thriller │ mental illness        │
+│ 1260   │ M                                                           │ 1931 │ Crime|Film-Noir|Thriller │ oninous               │
+│ 1260   │ M                                                           │ 1931 │ Crime|Film-Noir|Thriller │ serial killer         │
+│ 8228   │ Maltese Falcon,  The (a.k.a. Dangerous Female)              │ 1931 │ Mystery                  │ heist                 │
+│ 976    │ Farewell to Arms,  A                                        │ 1932 │ Romance|War              │ Hemingway             │
+│ 8507   │ Freaks                                                      │ 1932 │ Crime|Drama|Horror       │ circus                │
+│ 7091   │ Horse Feathers                                              │ 1932 │ Comedy                   │ Marx brothers         │
+│ 7049   │ Flying Down to Rio                                          │ 1933 │ Comedy|Musical|Romance   │ Astaire and Rogers    │
+│ 3932   │ Invisible Man,  The                                         │ 1933 │ Horror|Sci-Fi            │ invisibility          │
+│ 907    │ Gay Divorcee,  The                                          │ 1934 │ Comedy|Musical|Romance   │ divorce               │
+│ 905    │ It Happened One Night                                       │ 1934 │ Comedy|Romance           │ Screwball             │
+│ 950    │ Thin Man,  The                                              │ 1934 │ Comedy|Crime             │ Nick and Nora Charles │
+│ 32160  │ Twentieth Century                                           │ 1934 │ Comedy                   │ In Netflix queue      │
+│ 965    │ 39 Steps,  The                                              │ 1935 │ Drama|Mystery|Thriller   │ fugitive              │
+└────────┴─────────────────────────────────────────────────────────────┴──────┴──────────────────────────┴───────────────────────┘
+5. Вывести список самых свежих фильмов. В список должны войти все фильмы последнего года выпуска, имеющиеся в базе данных. Запрос должен быть универсальным, не зависящим от исходных данных (нужный год выпуска должен определяться в запросе, а не жестко задаваться).
+--------------------------------------------------
+SELECT * FROM movies WHERE year == (SELECT MAX(year) FROM movies);
+┌────────┬────────────────────────────────────┬──────┬────────────────────────────────────────┐
+│   id   │               title                │ year │                 genres                 │
+├────────┼────────────────────────────────────┼──────┼────────────────────────────────────────┤
+│ 122912 │ Avengers: Infinity War - Part I    │ 2018 │ Action|Adventure|Sci-Fi                │
+│ 182715 │ Annihilation                       │ 2018 │ Adventure|Mystery|Sci-Fi|Thriller      │
+│ 183011 │ The Commuter                       │ 2018 │ Crime|Drama|Mystery|Thriller           │
+│ 183295 │ Insidious: The Last Key            │ 2018 │ Horror|Mystery|Thriller                │
+│ 183611 │ Game Night                         │ 2018 │ Action|Comedy|Crime|Horror             │
+│ 183635 │ Maze Runner: The Death Cure        │ 2018 │ Action|Mystery|Sci-Fi|Thriller         │
+│ 183897 │ Isle of Dogs                       │ 2018 │ Animation|Comedy                       │
+│ 183911 │ The Clapper                        │ 2018 │ Comedy                                 │
+│ 183959 │ Tom Segura: Disgraceful            │ 2018 │ Comedy                                 │
+│ 184015 │ When We First Met                  │ 2018 │ Comedy                                 │
+│ 184253 │ The Cloverfield Paradox            │ 2018 │ Horror|Mystery|Sci-Fi|Thriller         │
+│ 184471 │ Tomb Raider                        │ 2018 │ Action|Adventure|Fantasy               │
+│ 184791 │ Fred Armisen: Standup for Drummers │ 2018 │ Comedy                                 │
+│ 184931 │ Death Wish                         │ 2018 │ Action|Crime|Drama|Thriller            │
+│ 184987 │ A Wrinkle in Time                  │ 2018 │ Adventure|Children|Fantasy|Sci-Fi      │
+│ 184997 │ Love,  Simon                       │ 2018 │ Comedy|Drama                           │
+│ 185029 │ A Quiet Place                      │ 2018 │ Drama|Horror|Thriller                  │
+│ 185031 │ Alpha                              │ 2018 │ Adventure|Thriller                     │
+│ 185033 │ I Kill Giants                      │ 2018 │ Drama|Fantasy|Thriller                 │
+│ 185435 │ Game Over,  Man!                   │ 2018 │ Action|Comedy                          │
+│ 185473 │ Blockers                           │ 2018 │ Comedy                                 │
+│ 185585 │ Pacific Rim: Uprising              │ 2018 │ Action|Fantasy|Sci-Fi                  │
+│ 186587 │ Rampage                            │ 2018 │ Action|Adventure|Sci-Fi                │
+│ 187031 │ Jurassic World: Fallen Kingdom     │ 2018 │ Action|Adventure|Drama|Sci-Fi|Thriller │
+│ 187541 │ Incredibles 2                      │ 2018 │ Action|Adventure|Animation|Children    │
+│ 187593 │ Deadpool 2                         │ 2018 │ Action|Comedy|Sci-Fi                   │
+│ 187595 │ Solo: A Star Wars Story            │ 2018 │ Action|Adventure|Children|Sci-Fi       │
+│ 187717 │ Won't You Be My Neighbor?          │ 2018 │ Documentary                            │
+│ 188189 │ Sorry to Bother You                │ 2018 │ Comedy|Fantasy|Sci-Fi                  │
+│ 188301 │ Ant-Man and the Wasp               │ 2018 │ Action|Adventure|Comedy|Fantasy|Sci-Fi │
+│ 188675 │ Dogman                             │ 2018 │ Crime|Drama                            │
+│ 188751 │ Mamma Mia: Here We Go Again!       │ 2018 │ Comedy|Romance                         │
+│ 188797 │ Tag                                │ 2018 │ Comedy                                 │
+│ 188833 │ The Man Who Killed Don Quixote     │ 2018 │ Adventure|Comedy|Fantasy               │
+│ 189043 │ Boundaries                         │ 2018 │ Comedy|Drama                           │
+│ 189111 │ Spiral                             │ 2018 │ Documentary                            │
+│ 189333 │ Mission: Impossible - Fallout      │ 2018 │ Action|Adventure|Thriller              │
+│ 189381 │ SuperFly                           │ 2018 │ Action|Crime|Thriller                  │
+│ 189713 │ BlacKkKlansman                     │ 2018 │ Comedy|Crime|Drama                     │
+│ 190183 │ The Darkest Minds                  │ 2018 │ Sci-Fi|Thriller                        │
+│ 193587 │ Bungo Stray Dogs: Dead Apple       │ 2018 │ Action|Animation                       │
+└────────┴────────────────────────────────────┴──────┴────────────────────────────────────────┘
+6. Найти все комедии, выпущенные после 2000 года, которые понравились мужчинам (оценка не ниже 4.5). Для каждого фильма в этом списке вывести название, год выпуска и количество таких оценок. Результат отсортировать по году выпуска и названию фильма.
+--------------------------------------------------
+SELECT DISTINCT movies.title, movies.year, COUNT(DISTINCT ratings.id) FROM movies INNER JOIN ratings ON movies.id == movie_id INNER JOIN users ON ratings.user_id == users.id WHERE movies.year > 2000 AND movies.genres LIKE '%%Comedy%%' AND users.gender == 'male' and ratings.rating >= 4.5 GROUP BY movies.title ORDER BY movies.year, movies.title;
+┌─────────────────────────────────────────────────────────────────────────────────────┬──────┬────────────────────────────┐
+│                                        title                                        │ year │ COUNT(DISTINCT ratings.id) │
+├─────────────────────────────────────────────────────────────────────────────────────┼──────┼────────────────────────────┤
+│ Amelie (Fabuleux destin d'Amélie Poulain,  Le)                                      │ 2001 │ 7                          │
+│ Bridget Jones's Diary                                                               │ 2001 │ 3                          │
+│ Gosford Park                                                                        │ 2001 │ 4                          │
+│ Kate & Leopold                                                                      │ 2001 │ 1                          │
+│ Knight's Tale,  A                                                                   │ 2001 │ 2                          │
+│ Monsoon Wedding                                                                     │ 2001 │ 1                          │
+│ Monsters,  Inc.                                                                     │ 2001 │ 7                          │
+│ Mummy Returns,  The                                                                 │ 2001 │ 1                          │
+│ My Wife is an Actress (Ma Femme est une Actrice)                                    │ 2001 │ 1                          │
+│ Rat Race                                                                            │ 2001 │ 1                          │
+│ Royal Tenenbaums,  The                                                              │ 2001 │ 4                          │
+│ Rush Hour 2                                                                         │ 2001 │ 1                          │
+│ Shaolin Soccer (Siu lam juk kau)                                                    │ 2001 │ 1                          │
+│ Shrek                                                                               │ 2001 │ 7                          │
+│ Someone Like You                                                                    │ 2001 │ 1                          │
+│ Zoolander                                                                           │ 2001 │ 1                          │
+│ Adaptation                                                                          │ 2002 │ 3                          │
+│ Bend It Like Beckham                                                                │ 2002 │ 1                          │
+│ Chicago                                                                             │ 2002 │ 2                          │
+│ Fubar                                                                               │ 2002 │ 1                          │
+│ Ice Age                                                                             │ 2002 │ 2                          │
+│ Punch-Drunk Love                                                                    │ 2002 │ 1                          │
+│ Secretary                                                                           │ 2002 │ 2                          │
+│ American Splendor                                                                   │ 2003 │ 2                          │
+│ Bad Santa                                                                           │ 2003 │ 1                          │
+│ Finding Nemo                                                                        │ 2003 │ 9                          │
+│ Gozu (Gokudô kyôfu dai-gekijô: Gozu)                                                │ 2003 │ 1                          │
+│ Holes                                                                               │ 2003 │ 1                          │
+│ Johnny English                                                                      │ 2003 │ 1                          │
+│ Lost in Translation                                                                 │ 2003 │ 5                          │
+│ Love Actually                                                                       │ 2003 │ 4                          │
+│ Mighty Wind,  A                                                                     │ 2003 │ 2                          │
+│ Old School                                                                          │ 2003 │ 1                          │
+│ Pirates of the Caribbean: The Curse of the Black Pearl                              │ 2003 │ 2                          │
+│ School of Rock                                                                      │ 2003 │ 1                          │
+│ 13 Going on 30                                                                      │ 2004 │ 1                          │
+│ Anchorman: The Legend of Ron Burgundy                                               │ 2004 │ 1                          │
+│ Bridget Jones: The Edge of Reason                                                   │ 2004 │ 1                          │
+│ EuroTrip                                                                            │ 2004 │ 2                          │
+│ Garden State                                                                        │ 2004 │ 1                          │
+│ Girl Next Door,  The                                                                │ 2004 │ 1                          │
+│ Incredibles,  The                                                                   │ 2004 │ 4                          │
+│ Kung Fu Hustle (Gong fu)                                                            │ 2004 │ 1                          │
+│ Life Aquatic with Steve Zissou,  The                                                │ 2004 │ 1                          │
+│ Mean Girls                                                                          │ 2004 │ 2                          │
+│ Napoleon Dynamite                                                                   │ 2004 │ 1                          │
+│ Shaun of the Dead                                                                   │ 2004 │ 3                          │
+│ Sideways                                                                            │ 2004 │ 2                          │
+│ Super Size Me                                                                       │ 2004 │ 1                          │
+│ Terminal,  The                                                                      │ 2004 │ 1                          │
+│ 40-Year-Old Virgin,  The                                                            │ 2005 │ 2                          │
+│ Family Stone,  The                                                                  │ 2005 │ 1                          │
+│ Ice Harvest,  The                                                                   │ 2005 │ 1                          │
+│ Lords of Dogtown                                                                    │ 2005 │ 1                          │
+│ Madagascar                                                                          │ 2005 │ 1                          │
+│ Wedding Crashers                                                                    │ 2005 │ 1                          │
+│ Borat: Cultural Learnings of America for Make Benefit Glorious Nation of Kazakhstan │ 2006 │ 2                          │
+│ Cars                                                                                │ 2006 │ 1                          │
+│ Clerks II                                                                           │ 2006 │ 1                          │
+│ Click                                                                               │ 2006 │ 2                          │
+│ Devil Wears Prada,  The                                                             │ 2006 │ 1                          │
+│ Jackass Number Two                                                                  │ 2006 │ 1                          │
+│ Little Miss Sunshine                                                                │ 2006 │ 2                          │
+│ Science of Sleep,  The (La science des rêves)                                       │ 2006 │ 2                          │
+│ Stranger than Fiction                                                               │ 2006 │ 1                          │
+│ Charlie Bartlett                                                                    │ 2007 │ 1                          │
+│ Hot Fuzz                                                                            │ 2007 │ 1                          │
+│ Hot Rod                                                                             │ 2007 │ 1                          │
+│ Jackass 2.5                                                                         │ 2007 │ 1                          │
+│ Juno                                                                                │ 2007 │ 6                          │
+│ Knocked Up                                                                          │ 2007 │ 1                          │
+│ Pirates of the Caribbean: At World's End                                            │ 2007 │ 1                          │
+│ Simpsons Movie,  The                                                                │ 2007 │ 1                          │
+│ Superbad                                                                            │ 2007 │ 4                          │
+│ Walk Hard: The Dewey Cox Story                                                      │ 2007 │ 1                          │
+│ Be Kind Rewind                                                                      │ 2008 │ 1                          │
+│ Forgetting Sarah Marshall                                                           │ 2008 │ 1                          │
+│ In Bruges                                                                           │ 2008 │ 2                          │
+│ Kung Fu Panda                                                                       │ 2008 │ 1                          │
+│ Madagascar: Escape 2 Africa                                                         │ 2008 │ 1                          │
+│ Nick and Norah's Infinite Playlist                                                  │ 2008 │ 1                          │
+│ Pineapple Express                                                                   │ 2008 │ 3                          │
+│ South Park: Imaginationland                                                         │ 2008 │ 1                          │
+│ Yes Man                                                                             │ 2008 │ 2                          │
+│ Zack and Miri Make a Porno                                                          │ 2008 │ 1                          │
+│ (500) Days of Summer                                                                │ 2009 │ 1                          │
+│ 17 Again                                                                            │ 2009 │ 1                          │
+│ Brüno (Bruno)                                                                       │ 2009 │ 1                          │
+│ Drag Me to Hell                                                                     │ 2009 │ 1                          │
+│ Hangover,  The                                                                      │ 2009 │ 1                          │
+│ Serious Man,  A                                                                     │ 2009 │ 1                          │
+│ Zombieland                                                                          │ 2009 │ 4                          │
+│ Despicable Me                                                                       │ 2010 │ 2                          │
+│ Easy A                                                                              │ 2010 │ 1                          │
+│ Jackass 3D                                                                          │ 2010 │ 1                          │
+│ Kick-Ass                                                                            │ 2010 │ 1                          │
+│ Scott Pilgrim vs. the World                                                         │ 2010 │ 2                          │
+│ Submarine                                                                           │ 2010 │ 1                          │
+│ Tangled                                                                             │ 2010 │ 1                          │
+│ Toy Story 3                                                                         │ 2010 │ 3                          │
+│ Attack the Block                                                                    │ 2011 │ 1                          │
+│ Bridesmaids                                                                         │ 2011 │ 1                          │
+│ Carnage                                                                             │ 2011 │ 1                          │
+│ Crazy,  Stupid,  Love.                                                              │ 2011 │ 2                          │
+│ Descendants,  The                                                                   │ 2011 │ 2                          │
+│ Horrible Bosses                                                                     │ 2011 │ 1                          │
+│ Intouchables                                                                        │ 2011 │ 2                          │
+│ Kung Fu Panda 2                                                                     │ 2011 │ 1                          │
+│ Midnight in Paris                                                                   │ 2011 │ 2                          │
+│ Puss in Boots                                                                       │ 2011 │ 1                          │
+│ Rango                                                                               │ 2011 │ 1                          │
+│ Sherlock Holmes: A Game of Shadows                                                  │ 2011 │ 2                          │
+│ The Artist                                                                          │ 2011 │ 1                          │
+│ Cabin in the Woods,  The                                                            │ 2012 │ 1                          │
+│ Madagascar 3: Europe's Most Wanted                                                  │ 2012 │ 1                          │
+│ Mirror Mirror                                                                       │ 2012 │ 1                          │
+│ Moonrise Kingdom                                                                    │ 2012 │ 2                          │
+│ Paperman                                                                            │ 2012 │ 1                          │
+│ Seeking a Friend for the End of the World                                           │ 2012 │ 1                          │
+│ Silver Linings Playbook                                                             │ 2012 │ 1                          │
+│ Wreck-It Ralph                                                                      │ 2012 │ 1                          │
+│ Anchorman 2: The Legend Continues                                                   │ 2013 │ 1                          │
+│ Despicable Me 2                                                                     │ 2013 │ 1                          │
+│ Frozen                                                                              │ 2013 │ 2                          │
+│ Kick-Ass 2                                                                          │ 2013 │ 1                          │
+│ Secret Life of Walter Mitty,  The                                                   │ 2013 │ 1                          │
+│ This Is the End                                                                     │ 2013 │ 1                          │
+│ Wolf of Wall Street,  The                                                           │ 2013 │ 3                          │
+│ Big Hero 6                                                                          │ 2014 │ 2                          │
+│ Birdman: Or (The Unexpected Virtue of Ignorance)                                    │ 2014 │ 1                          │
+│ Grand Budapest Hotel,  The                                                          │ 2014 │ 1                          │
+│ The Lego Movie                                                                      │ 2014 │ 1                          │
+│ Focus                                                                               │ 2015 │ 1                          │
+│ Inside Out                                                                          │ 2015 │ 3                          │
+│ Kingsman: The Secret Service                                                        │ 2015 │ 1                          │
+│ Minions                                                                             │ 2015 │ 1                          │
+│ The DUFF                                                                            │ 2015 │ 1                          │
+│ The Man from U.N.C.L.E.                                                             │ 2015 │ 1                          │
+│ Deadpool                                                                            │ 2016 │ 2                          │
+│ Hunt for the Wilderpeople                                                           │ 2016 │ 1                          │
+│ La La Land                                                                          │ 2016 │ 1                          │
+│ Sausage Party                                                                       │ 2016 │ 1                          │
+│ Zootopia                                                                            │ 2016 │ 2                          │
+│ Deadpool 2                                                                          │ 2018 │ 1                          │
+└─────────────────────────────────────────────────────────────────────────────────────┴──────┴────────────────────────────┘
+7. Провести анализ занятий (профессий) пользователей - вывести количество пользователей для каждого рода занятий. Найти самую распространенную и самую редкую профессию посетитетей сайта.
+--------------------------------------------------
+SELECT occupation, COUNT(DISTINCT id) as number FROM users GROUP BY occupation;
+┌───────────────┬────────┐
+│  occupation   │ number │
+├───────────────┼────────┤
+│ administrator │ 79     │
+│ artist        │ 28     │
+│ doctor        │ 7      │
+│ educator      │ 95     │
+│ engineer      │ 67     │
+│ entertainment │ 18     │
+│ executive     │ 32     │
+│ healthcare    │ 16     │
+│ homemaker     │ 7      │
+│ lawyer        │ 12     │
+│ librarian     │ 51     │
+│ marketing     │ 26     │
+│ none          │ 9      │
+│ other         │ 105    │
+│ programmer    │ 66     │
+│ retired       │ 14     │
+│ salesman      │ 12     │
+│ scientist     │ 31     │
+│ student       │ 196    │
+│ technician    │ 27     │
+│ writer        │ 45     │
+└───────────────┴────────┘
+SELECT occupation, max(number) FROM (SELECT occupation, COUNT(DISTINCT id) as number FROM users GROUP BY occupation);
+┌────────────┬─────────────┐
+│ occupation │ max(number) │
+├────────────┼─────────────┤
+│ student    │ 196         │
+└────────────┴─────────────┘
+SELECT occupation, min(number) FROM (SELECT occupation, COUNT(DISTINCT id) as number FROM users GROUP BY occupation);
+┌────────────┬─────────────┐
+│ occupation │ min(number) │
+├────────────┼─────────────┤
+│ doctor     │ 7           │
+└────────────┴─────────────┘
